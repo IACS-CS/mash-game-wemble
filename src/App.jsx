@@ -2,47 +2,33 @@ import { useState } from "react";
 import "./App.css";
 
 const App = () => {
-  // State for the three restaurant inputs
   const [input1, setInput1] = useState('');
   const [input2, setInput2] = useState('');
   const [input3, setInput3] = useState('');
-
-  // State to store the randomly selected restaurant
   const [selectedValue, setSelectedValue] = useState('');
-
-  // State for saving the restaurant and navigating to the dishes page
   const [savedValue, setSavedValue] = useState(null);
   const [showDishesPage, setShowDishesPage] = useState(false);
-
-  // State to store the dishes entered by the user
-  const [dishes, setDishes] = useState({ dish1: '', dish2: '', dish3: '' });
-
-  // State to store the sides entered by the user
-  const [sides, setSides] = useState({ side1: '', side2: '', side3: '' });
-
-  // State to store the saved dishes and navigation to the next page
   const [showSidesPage, setShowSidesPage] = useState(false);
-
-  // State to store the randomly selected dish
+  const [showDrinksPage, setShowDrinksPage] = useState(false);
+  const [dishes, setDishes] = useState({ dish1: '', dish2: '', dish3: '' });
+  const [sides, setSides] = useState({ side1: '', side2: '', side3: '' });
+  const [drinks, setDrinks] = useState({ drink1: '', drink2: '', drink3: '' });
   const [randomDish, setRandomDish] = useState(null);
-
-  // State to track all selected restaurant-dish pairs
+  const [randomSide, setRandomSide] = useState(null);
+  const [randomDrink, setRandomDrink] = useState(null);
   const [selectionHistory, setSelectionHistory] = useState([]);
 
-  // Function to randomly select one of the restaurant inputs
   const handleRandomSelection = () => {
     const inputs = [input1, input2, input3];
     const randomValue = inputs[Math.floor(Math.random() * inputs.length)];
     setSelectedValue(randomValue);
   };
 
-  // Save the selected restaurant and navigate to the dishes page
   const saveValueAndNavigate = () => {
-    setSavedValue(selectedValue);  // Save the selected restaurant
-    setShowDishesPage(true);        // Navigate to the dishes page
+    setSavedValue(selectedValue);
+    setShowDishesPage(true);
   };
 
-  // Handle dish input changes
   const handleDishChange = (e) => {
     const { name, value } = e.target;
     setDishes((prevDishes) => ({
@@ -51,7 +37,6 @@ const App = () => {
     }));
   };
 
-  // Handle side input changes
   const handleSideChange = (e) => {
     const { name, value } = e.target;
     setSides((prevSides) => ({
@@ -60,35 +45,82 @@ const App = () => {
     }));
   };
 
-  // Save dishes and navigate to the sides page
-  const saveDishesAndNavigate = () => {
-    setShowSidesPage(true);         // Navigate to the sides page
+  const handleDrinkChange = (e) => {
+    const { name, value } = e.target;
+    setDrinks((prevDrinks) => ({
+      ...prevDrinks,
+      [name]: value,
+    }));
   };
 
-  // Function to randomly select one of the dishes and display it
+  const saveDishesAndNavigate = () => {
+    setShowSidesPage(true);
+  };
+
+  const saveSidesAndNavigate = () => {
+    setShowDrinksPage(true); // Fixed navigation to drinks page
+  };
+
   const handleRandomDishSelection = () => {
     const dishValues = [dishes.dish1, dishes.dish2, dishes.dish3];
-    const nonEmptyDishes = dishValues.filter(dish => dish.trim() !== ''); // Filter out empty dishes
+    const nonEmptyDishes = dishValues.filter(dish => dish.trim() !== '');
     if (nonEmptyDishes.length > 0) {
       const randomDish = nonEmptyDishes[Math.floor(Math.random() * nonEmptyDishes.length)];
-      setRandomDish(randomDish); // Set the random dish to state
-
-      // Add the selected restaurant and random dish to the history
+      setRandomDish(randomDish);
       setSelectionHistory((prevHistory) => [
         ...prevHistory,
         { restaurant: savedValue, dish: randomDish },
       ]);
     } else {
-      setRandomDish(null); // If no dishes are entered, reset the random dish
+      setRandomDish(null);
     }
   };
 
-  // Render the main content, dishes input page, or sides input page
+  const handleRandomSideSelection = () => {
+    const sideValues = [sides.side1, sides.side2, sides.side3];
+    const nonEmptySides = sideValues.filter(side => side.trim() !== '');
+    if (nonEmptySides.length > 0) {
+      const randomSide = nonEmptySides[Math.floor(Math.random() * nonEmptySides.length)];
+      setRandomSide(randomSide);
+      setSelectionHistory((prevHistory) => [
+        ...prevHistory,
+        { restaurant: savedValue, dish: randomDish, side: randomSide },
+      ]);
+    } else {
+      setRandomSide(null);
+    }
+  };
+
+  const handleRandomDrinkSelection = () => {
+    const drinkValues = [drinks.drink1, drinks.drink2, drinks.drink3];
+    const nonEmptyDrinks = drinkValues.filter(drink => drink.trim() !== '');
+    if (nonEmptyDrinks.length > 0) {
+      const randomDrink = nonEmptyDrinks[Math.floor(Math.random() * nonEmptyDrinks.length)];
+      setRandomDrink(randomDrink);
+      setSelectionHistory((prevHistory) => [
+        ...prevHistory,
+        { restaurant: savedValue, dish: randomDish, side: randomSide, drink: randomDrink },
+      ]);
+    } else {
+      setRandomDrink(null);
+    }
+  };
+
+  const SavedInfoBox = () => (
+    <div className="saved-info-box">
+      <h3>Saved Information</h3>
+      {savedValue && <p><strong>Restaurant:</strong> {savedValue}</p>}
+      {randomDish && <p><strong>Random Dish:</strong> {randomDish}</p>}
+      {randomSide && <p><strong>Random Side:</strong> {randomSide}</p>}
+      {randomDrink && <p><strong>Random Drink:</strong> {randomDrink}</p>}
+    </div>
+  );
+
+  // Sides Page
   if (showSidesPage) {
     return (
       <div>
-        <h1>Enter 3 Sides for {savedValue} - {randomDish}</h1> {/* Display the selected restaurant and dish */}
-        
+        <h1>Enter 3 Sides for {savedValue} - {randomDish}</h1>
         <input
           type="text"
           name="side1"
@@ -110,15 +142,69 @@ const App = () => {
           value={sides.side3}
           onChange={handleSideChange}
         />
-        <button onClick={() => alert('Sides submitted!')}>Save and Finish</button>
+        <button onClick={saveSidesAndNavigate}>Save Sides & Go to Drinks Page</button>
+
+        {/* Randomizer button */}
+        <button onClick={handleRandomSideSelection}>Randomly Select a Side</button>
+        {randomSide && (
+          <div>
+            <h3>Randomly Selected Side:</h3>
+            <p>{randomSide}</p>
+          </div>
+        )}
+
+        <SavedInfoBox />
       </div>
     );
   }
 
+  // Drinks Page
+  if (showDrinksPage) {
+    return (
+      <div>
+        <h1>Enter 3 Drinks for {savedValue} - {randomDish}</h1>
+        <input
+          type="text"
+          name="drink1"
+          placeholder="Drink 1"
+          value={drinks.drink1}
+          onChange={handleDrinkChange}
+        />
+        <input
+          type="text"
+          name="drink2"
+          placeholder="Drink 2"
+          value={drinks.drink2}
+          onChange={handleDrinkChange}
+        />
+        <input
+          type="text"
+          name="drink3"
+          placeholder="Drink 3"
+          value={drinks.drink3}
+          onChange={handleDrinkChange}
+        />
+        <button onClick={handleRandomDrinkSelection}>Randomly Select a Drink</button>
+        <button onClick={() => alert('Drinks submitted!')}>Save and Finish</button>
+
+        {/* Randomizer button */}
+        {randomDrink && (
+          <div>
+            <h3>Randomly Selected Drink:</h3>
+            <p>{randomDrink}</p>
+          </div>
+        )}
+
+        <SavedInfoBox />
+      </div>
+    );
+  }
+
+  // Dishes Page
   if (showDishesPage) {
     return (
       <div>
-        <h1>Enter 3 Main Dishes for {savedValue}</h1> {/* Display the selected restaurant */}
+        <h1>Enter 3 Main Dishes for {savedValue}</h1>
         <input
           type="text"
           name="dish1"
@@ -142,28 +228,16 @@ const App = () => {
         />
         <button onClick={saveDishesAndNavigate}>Save Dishes & Go to Sides Page</button>
 
-        {/* Display the selected restaurant and dishes list */}
-        {dishes.dish1 && dishes.dish2 && dishes.dish3 && (
-          <div>
-            <h2>Saved Dishes for {savedValue}:</h2>
-            <ul>
-              <li>{dishes.dish1}</li>
-              <li>{dishes.dish2}</li>
-              <li>{dishes.dish3}</li>
-            </ul>
-          </div>
-        )}
-
-        {/* Button to randomly select a dish */}
+        {/* Randomizer button */}
         <button onClick={handleRandomDishSelection}>Randomly Select a Dish</button>
-
-        {/* Display the randomly selected dish */}
         {randomDish && (
           <div>
             <h3>Randomly Selected Dish:</h3>
             <p>{randomDish}</p>
           </div>
         )}
+
+        <SavedInfoBox />
       </div>
     );
   }
@@ -172,10 +246,8 @@ const App = () => {
     <main>
       <h1>Welcome to the Indecisive Decider</h1>
 
-      {/* Text Inputs Section for restaurants */}
       <div>
         <h2>Enter 3 restaurants you want to go to:</h2>
-
         <div>
           <input
             type="text"
@@ -184,7 +256,6 @@ const App = () => {
             placeholder="Enter first restaurant"
           />
         </div>
-
         <div>
           <input
             type="text"
@@ -193,7 +264,6 @@ const App = () => {
             placeholder="Enter second restaurant"
           />
         </div>
-
         <div>
           <input
             type="text"
@@ -202,7 +272,6 @@ const App = () => {
             placeholder="Enter third restaurant"
           />
         </div>
-
         <button onClick={handleRandomSelection}>Randomly Select</button>
         {selectedValue && (
           <div>
@@ -211,38 +280,13 @@ const App = () => {
           </div>
         )}
       </div>
-
-      {/* Save button to save the selected restaurant and navigate to the next page */}
       {selectedValue && !savedValue && (
         <button onClick={saveValueAndNavigate}>Save & Go to Dishes Page</button>
       )}
 
-      {/* Display the saved value */}
-      {savedValue && (
-        <div className="savedValue">
-          <h3>Saved Value:</h3>
-          <p>{savedValue}</p>
-        </div>
-      )}
-
-      {/* Box at the bottom to display restaurant and dishes */}
-      <div className="selectionBox">
-        <h2>Selected Restaurant & Dish History:</h2>
-        {selectionHistory.length === 0 ? (
-          <p>No selections made yet.</p>
-        ) : (
-          <ul>
-            {selectionHistory.map((selection, index) => (
-              <li key={index}>
-                {selection.restaurant} - {selection.dish}
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
+      <SavedInfoBox />
     </main>
   );
 };
 
 export default App;
-``
