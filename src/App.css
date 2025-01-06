@@ -1,5 +1,5 @@
 body {
-    background-color: #05053a;
+    background-color: #000000;
     color: #fafaff;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     display: grid;
@@ -19,7 +19,7 @@ input,button {
     font-size: 18px;
 }
 button {
-    background: #c6093b;
+    background: #f94343;
     color: white;
     border: none;
     border-radius: 8px;

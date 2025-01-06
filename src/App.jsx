@@ -10,6 +10,7 @@ const App = () => {
   const [showDishesPage, setShowDishesPage] = useState(false);
   const [showSidesPage, setShowSidesPage] = useState(false);
   const [showDrinksPage, setShowDrinksPage] = useState(false);
+  const [showFinalPage, setShowFinalPage] = useState(false); // New state for final page
   const [dishes, setDishes] = useState({ dish1: '', dish2: '', dish3: '' });
   const [sides, setSides] = useState({ side1: '', side2: '', side3: '' });
   const [drinks, setDrinks] = useState({ drink1: '', drink2: '', drink3: '' });
@@ -54,13 +55,13 @@ const App = () => {
   };
 
   const saveDishesAndNavigate = () => {
-    setShowSidesPage(true); // Navigate to sides page
-    setShowDishesPage(false); // Hide dishes page
+    setShowSidesPage(true);
+    setShowDishesPage(false);
   };
 
   const saveSidesAndNavigate = () => {
-    setShowSidesPage(false); // Hide sides page
-    setShowDrinksPage(true); // Show drinks page
+    setShowSidesPage(false);
+    setShowDrinksPage(true);
   };
 
   const handleRandomDishSelection = () => {
@@ -118,10 +119,36 @@ const App = () => {
     </div>
   );
 
+  // Back Button Component
+  const BackButton = ({ goBack }) => (
+    <button onClick={goBack}>Back</button>
+  );
+
+  // Final Page (Show all selections)
+  if (showFinalPage) {
+    return (
+      <div>
+        <h1>Your Selections</h1>
+        <ul>
+          {selectionHistory.map((item, index) => (
+            <li key={index}>
+              <strong>Restaurant:</strong> {item.restaurant} <br />
+              <strong>Dish:</strong> {item.dish} <br />
+              <strong>Side:</strong> {item.side} <br />
+              <strong>Drink:</strong> {item.drink}
+            </li>
+          ))}
+        </ul>
+        <button onClick={() => setShowFinalPage(false)}>Go Back</button>
+      </div>
+    );
+  }
+
   // Sides Page
   if (showSidesPage) {
     return (
       <div>
+        <BackButton goBack={() => { setShowSidesPage(false); setShowDishesPage(true); }} />
         <h1>Enter 3 Sides for {savedValue} - {randomDish}</h1>
         <input
           type="text"
@@ -164,6 +191,7 @@ const App = () => {
   if (showDrinksPage) {
     return (
       <div>
+        <BackButton goBack={() => { setShowDrinksPage(false); setShowSidesPage(true); }} />
         <h1>Enter 3 Drinks for {savedValue} - {randomDish}</h1>
         <input
           type="text"
@@ -187,7 +215,7 @@ const App = () => {
           onChange={handleDrinkChange}
         />
         <button onClick={handleRandomDrinkSelection}>Randomly Select a Drink</button>
-        <button onClick={() => alert('Drinks submitted!')}>Save and Finish</button>
+        <button onClick={() => { setShowFinalPage(true); }}>Save & Show Final Page</button>
 
         {/* Randomizer button */}
         {randomDrink && (
@@ -206,6 +234,7 @@ const App = () => {
   if (showDishesPage) {
     return (
       <div>
+        <BackButton goBack={() => { setShowDishesPage(false); setSavedValue(null); }} />
         <h1>Enter 3 Main Dishes for {savedValue}</h1>
         <input
           type="text"
@@ -228,7 +257,8 @@ const App = () => {
           value={dishes.dish3}
           onChange={handleDishChange}
         />
-       
+        <button onClick={saveDishesAndNavigate}>Save Dishes & Go to Sides Page</button>
+
         {/* Randomizer button */}
         <button onClick={handleRandomDishSelection}>Randomly Select a Dish</button>
         {randomDish && (
