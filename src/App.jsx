@@ -54,11 +54,13 @@ const App = () => {
   };
 
   const saveDishesAndNavigate = () => {
-    setShowSidesPage(true);
+    setShowSidesPage(true); // Navigate to sides page
+    setShowDishesPage(false); // Hide dishes page
   };
 
   const saveSidesAndNavigate = () => {
-    setShowDrinksPage(true); // Fixed navigation to drinks page
+    setShowSidesPage(false); // Hide sides page
+    setShowDrinksPage(true); // Show drinks page
   };
 
   const handleRandomDishSelection = () => {
@@ -226,8 +228,7 @@ const App = () => {
           value={dishes.dish3}
           onChange={handleDishChange}
         />
-        <button onClick={saveDishesAndNavigate}>Save Dishes & Go to Sides Page</button>
-
+       
         {/* Randomizer button */}
         <button onClick={handleRandomDishSelection}>Randomly Select a Dish</button>
         {randomDish && (
