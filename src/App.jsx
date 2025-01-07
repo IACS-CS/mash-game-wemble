@@ -17,7 +17,14 @@ const App = () => {
   const [randomDish, setRandomDish] = useState(null);
   const [randomSide, setRandomSide] = useState(null);
   const [randomDrink, setRandomDrink] = useState(null);
-  const [selectionHistory, setSelectionHistory] = useState([]);
+  
+  // New state to store the final order (latest selections)
+  const [finalOrder, setFinalOrder] = useState({
+    restaurant: '',
+    dish: '',
+    side: '',
+    drink: ''
+  });
 
   const handleRandomSelection = () => {
     const inputs = [input1, input2, input3];
@@ -70,10 +77,11 @@ const App = () => {
     if (nonEmptyDishes.length > 0) {
       const randomDish = nonEmptyDishes[Math.floor(Math.random() * nonEmptyDishes.length)];
       setRandomDish(randomDish);
-      setSelectionHistory((prevHistory) => [
-        ...prevHistory,
-        { restaurant: savedValue, dish: randomDish },
-      ]);
+      setFinalOrder((prevOrder) => ({
+        ...prevOrder,
+        restaurant: savedValue,
+        dish: randomDish,
+      }));
     } else {
       setRandomDish(null);
     }
@@ -85,10 +93,10 @@ const App = () => {
     if (nonEmptySides.length > 0) {
       const randomSide = nonEmptySides[Math.floor(Math.random() * nonEmptySides.length)];
       setRandomSide(randomSide);
-      setSelectionHistory((prevHistory) => [
-        ...prevHistory,
-        { restaurant: savedValue, dish: randomDish, side: randomSide },
-      ]);
+      setFinalOrder((prevOrder) => ({
+        ...prevOrder,
+        side: randomSide,
+      }));
     } else {
       setRandomSide(null);
     }
@@ -100,10 +108,10 @@ const App = () => {
     if (nonEmptyDrinks.length > 0) {
       const randomDrink = nonEmptyDrinks[Math.floor(Math.random() * nonEmptyDrinks.length)];
       setRandomDrink(randomDrink);
-      setSelectionHistory((prevHistory) => [
-        ...prevHistory,
-        { restaurant: savedValue, dish: randomDish, side: randomSide, drink: randomDrink },
-      ]);
+      setFinalOrder((prevOrder) => ({
+        ...prevOrder,
+        drink: randomDrink,
+      }));
     } else {
       setRandomDrink(null);
     }
@@ -124,21 +132,37 @@ const App = () => {
     <button onClick={goBack}>Back</button>
   );
 
-  // Final Page (Show all selections)
+  // Final Page (Show only the final order)
   if (showFinalPage) {
     return (
       <div>
-        <h1>Your Selections</h1>
-        <ul>
-          {selectionHistory.map((item, index) => (
-            <li key={index}>
-              <strong>Restaurant:</strong> {item.restaurant} <br />
-              <strong>Dish:</strong> {item.dish} <br />
-              <strong>Side:</strong> {item.side} <br />
-              <strong>Drink:</strong> {item.drink}
-            </li>
-          ))}
-        </ul>
+        <h1>Your Order</h1>
+        <p><strong>Restaurant:</strong> {finalOrder.restaurant}</p>
+        <p><strong>Dish:</strong> {finalOrder.dish}</p>
+        <p><strong>Side:</strong> {finalOrder.side}</p>
+        <p><strong>Drink:</strong> {finalOrder.drink}</p>
+        
+        {/* Reset Game Button */}
+        <button onClick={() => {
+          // Reset all states to their initial values
+          setInput1('');
+          setInput2('');
+          setInput3('');
+          setSelectedValue('');
+          setSavedValue(null);
+          setShowDishesPage(false);
+          setShowSidesPage(false);
+          setShowDrinksPage(false);
+          setShowFinalPage(false);
+          setDishes({ dish1: '', dish2: '', dish3: '' });
+          setSides({ side1: '', side2: '', side3: '' });
+          setDrinks({ drink1: '', drink2: '', drink3: '' });
+          setRandomDish(null);
+          setRandomSide(null);
+          setRandomDrink(null);
+          setFinalOrder({ restaurant: '', dish: '', side: '', drink: '' });
+        }}>Reset Game</button>
+        
         <button onClick={() => setShowFinalPage(false)}>Go Back</button>
       </div>
     );
