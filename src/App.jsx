@@ -195,7 +195,7 @@ const App = () => {
           value={sides.side3}
           onChange={handleSideChange}
         />
-        <button className="squidGame" onClick={saveSidesAndNavigate}>Save Sides & Go to Drinks Page</button>
+        
 
         {/* Randomizer button */}
         <button onClick={handleRandomSideSelection}>Randomly Select a Side</button>
@@ -205,7 +205,7 @@ const App = () => {
             <p>{randomSide}</p>
           </div>
         )}
-
+<button className="squidGame" onClick={saveSidesAndNavigate}>Save Sides & Go to Drinks Page</button>
         <SavedInfoBox />
       </div>
     );
@@ -238,9 +238,7 @@ const App = () => {
           value={drinks.drink3}
           onChange={handleDrinkChange}
         />
-        <button onClick={handleRandomDrinkSelection}>Randomly Select a Drink</button>
-        <button className="squidGame" onClick={() => { setShowFinalPage(true); }}>Save & Show Final Page</button>
-
+      
         {/* Randomizer button */}
         {randomDrink && (
           <div>
@@ -248,7 +246,8 @@ const App = () => {
             <p>{randomDrink}</p>
           </div>
         )}
-
+ <button onClick={handleRandomDrinkSelection}>Randomly Select a Drink</button>
+ <button className="squidGame" onClick={() => { setShowFinalPage(true); }}>Save & Show Final Page</button>
         <SavedInfoBox />
       </div>
     );
@@ -281,7 +280,6 @@ const App = () => {
           value={dishes.dish3}
           onChange={handleDishChange}
         />
-        <button className="squidGame" onClick={saveDishesAndNavigate}>Save Dishes & Go to Sides Page</button>
 
         {/* Randomizer button */}
         <button onClick={handleRandomDishSelection}>Randomly Select a Dish</button>
@@ -291,7 +289,7 @@ const App = () => {
             <p>{randomDish}</p>
           </div>
         )}
-
+<button className="squidGame" onClick={saveDishesAndNavigate}>Save Dishes & Go to Sides Page</button>
         <SavedInfoBox />
       </div>
     );
