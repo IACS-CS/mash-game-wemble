@@ -1,6 +1,6 @@
 import { useState } from "react";
 import "./App.css";
-
+// used chat gpt to help with the buttons like back buttons and continues and used chat gpt to help with the randomization part.
 const App = () => {
   const [input1, setInput1] = useState('');
   const [input2, setInput2] = useState('');
