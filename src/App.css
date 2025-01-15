@@ -1,3 +1,5 @@
+@import url('https://fonts.cdnfonts.com/css/game-of-squids');
+
 body {
     background-color: #000000;
     color: #fafaff;
@@ -5,6 +7,7 @@ body {
     display: grid;
     place-content: center;
     overflow-y: auto;
+    font-family: 'Game Of Squids', sans-serif;
 }
 h1,h2,h3,h4,h5,h6,p {
     margin-block: 0.5em;
@@ -14,15 +17,16 @@ main {
     margin-inline: auto;
 }
 input,button {
-    padding-inline: 8px;;
-    padding-block: 4px;
+    padding-inline: 32px;
+    padding-block: 16px;
     font-size: 18px;
 }
 button {
-    background: #f94343;
+    background: #249f9c;
     color: white;
     border: none;
     border-radius: 8px;
+    gap:8px;
 }
 .row,.col {
     gap: 8px;
@@ -31,4 +35,9 @@ button {
 }
 .col {
     flex-direction: column;    
+}
+
+button.squidGame {
+    color:black;
+    background-color:#ed1b76;
 }
